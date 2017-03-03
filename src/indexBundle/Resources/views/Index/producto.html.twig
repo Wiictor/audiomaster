@@ -1,0 +1,105 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}Audio Master - {{ producto[0].marca }} {{ producto[0].modelo }}{% endblock %}
+
+{% block body %}
+    <div id="content">
+        <div class="row">
+            <ol class="breadcrumb col-sm-4">
+                <li><a href="{{ path('index') }}" title="Audio Master - Inicio">Inicio</a></li>
+                <li><a href="{% if producto[0].categoria == "Baterías" %}
+                                {{ path('categoria', { "nombre": "baterias" }) }}" title="{{ producto[0].categoria }}">{{ producto[0].categoria }}
+                {% else %}
+                    {{ path('categoria', { "nombre": producto[0].categoria|lower }) }}" title="{{ producto[0].categoria }}">{{ producto[0].categoria }}
+                {% endif %}</a></li>
+                <li>{{ producto[0].marca }} {{ producto[0].modelo }}</li>
+            </ol>
+        </div>
+        <div class="row">
+            <div class="col-sm-1" id="divImagenes">
+                {# producto[0].url|split(",") #}
+                {% set imagenes = producto[0].url|split(",") %}
+                {% for imagen in 1..imagenes|length-1 %}
+                    <img src="{{ asset(imagenes[imagen]) }}" alt="Imagen nº {{ imagen }}" width="240" height="600">
+                {% endfor %}
+            </div>
+            <div class="col-sm-2" style="min-height: 120px">
+                <img src="{{ asset(imagenes[0]) }}" alt="Imagen principal" id="imgPrincipal" style="display: block; margin: auto; margin-top: 20px">
+            </div>
+            <div class="col-sm-5">
+                <h1>{{ producto[0].marca }} {{ producto[0].modelo }}</h1>
+                <p id="descProducto">
+                    {{ producto[0].descripcion }}
+                </p>
+                {% if app.session.get("usuario") is not null %}
+                    <button class="btn btn-red col-sm-offset-5" title="Añadir al carrito">Añadir al carrito</button>
+                {% endif %}
+            </div>
+            {% if app.session.get("usuario") is not null %}
+                <div class="col-sm-4" id="colPrecio">
+                    <h1 id="precioProducto">{{ producto[0].precio }}&euro;</h1>
+                    <div class="col-sm-offset-4" title="Elige una cantidad">
+                        <label for="cantidad">Cantidad: </label>
+                        <input type="number" min="1" max="{{ producto[0].stockActual }}" value=1 name="cantidad" id="cantidad">
+                    </div>
+                    <br>
+                    <div class="col-sm-offset-1" title="Calcula los gastos de envío">
+                        <label for="agencia">Agencia: </label>
+                        <select name="agencia" id="agencia">
+                            {% for agencia in agencias %}
+                            <option value="{{ agencia.id }}">{{ agencia.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label for="ubicacion">Ubicación: </label>
+                        <select name="ubicacion" id="ubicacion">
+                            {% for ubic in ubicacion %}
+                            <option value="{{ ubic.id }}">{{ ubic.ubicacion }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label>Gastos de envío estimados: <label id="gasto">{{ precio[0].precio }}</label>&euro;</label>
+                    </div>
+
+
+                </div>
+                {% else %}
+                <h2 style="text-align: center">Inicia sesión para comprar este producto</h2>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        var arrayprecios=[];
+        {% for prec in precio %}
+            arrayprecios.push({{ prec.precio }});
+        {%  endfor %}
+        $(document).ready(function(){
+
+        $("#cantidad,#agencia,#ubicacion").change(function(){
+            var agencia = 0;
+            if(parseInt($("#agencia").val()) == 1) {
+                 agencia = parseInt($("#agencia").val()) + parseInt($("#ubicacion").val()) -2;
+            }
+            if(parseInt($("#agencia").val()) == 2) {
+                 agencia = parseInt($("#agencia").val()) + parseInt($("#ubicacion").val()) + 1;
+            }
+            if(parseInt($("#agencia").val()) == 3) {
+                 agencia = parseInt($("#agencia").val()) + parseInt($("#ubicacion").val()) + 4;
+            }
+            if(parseInt($("#agencia").val()) == 4) {
+                 agencia = parseInt($("#agencia").val()) + parseInt($("#ubicacion").val()) + 7;
+            }
+            if(parseInt($("#agencia").val()) == 5) {
+                 agencia = parseInt($("#agencia").val()) + parseInt($("#ubicacion").val()) + 10;
+            }
+            if(parseInt($("#agencia").val()) == 6) {
+                 agencia = parseInt($("#agencia").val()) + parseInt($("#ubicacion").val()) + 13;
+            }
+            var precio = parseInt(arrayprecios[agencia])* $("#cantidad").val();
+            $("#gasto").text(precio);
+        });
+    });
+    </script>
+{%  endblock %}

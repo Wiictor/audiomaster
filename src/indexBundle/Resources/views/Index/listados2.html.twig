@@ -1,0 +1,45 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}Audio Master - Listados{% endblock %}
+
+{% block body %}
+    <div id="content">
+        <div class="row">
+                <div id="consultas">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <a href="{{ 'listados' }}"><button class="btn btn-success" >Volver</button></a>
+                            <h3>Consulta de facturas por uso de clientes</h3>
+                            <div id="datosFacturas">
+
+                                <strong>Uso de las distintas agencias:</strong>
+                                {% set foo = 0 %}
+                                {% for factura in listadoagencias2 %}
+                                    {% set foo = foo + 1 %}
+                                {% endfor %}
+                                {% if foo>0 %}
+                                    <br><br>
+                                    <p> Desde <strong>{{ fechaAntigua }}</strong> Hasta <strong>{{ fechaNueva }}</strong></p>
+                                    <table class="table table-bordered table-striped">
+                                        <tr>
+                                            <th>Agencia</th>
+                                            <th>Número de veces</th>
+                                        </tr>
+                                        {% for factura in listadoagencias2 %}
+                                            <tr>
+                                                <td>{{ factura.transporte }}</td>
+                                                <td>{{ factura.numero}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                {% else %}
+                                    <p>No hay suficientes datos</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+{% endblock %}

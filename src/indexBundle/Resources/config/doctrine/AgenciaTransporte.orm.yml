@@ -1,0 +1,15 @@
+indexBundle\Entity\AgenciaTransporte:
+    type: entity
+    table: null
+    repositoryClass: indexBundle\Repository\AgenciaTransporteRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nombre:
+            type: string
+            length: '20'
+    lifecycleCallbacks: {  }

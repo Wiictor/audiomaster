@@ -1,0 +1,42 @@
+index2:
+    path:     /
+    defaults: { _controller: indexBundle:Index:index }
+index:
+    path:     /index
+    defaults: { _controller: indexBundle:Index:index }
+
+categoria:
+    path: /categoria/{nombre}
+    defaults: { _controller: indexBundle:Categoria:index}
+
+registro:
+    path: /registro
+    defaults: { _controller: indexBundle:Registro:registro}
+
+login:
+    path: /login
+    defaults: { _controller: indexBundle:Login:login}
+
+logout:
+    path: /logout
+    defaults: { _controller: indexBundle:Login:logout}
+
+producto:
+    path: /producto/{id}
+    defaults: { _controller: indexBundle:Producto:index}
+
+panelControl:
+    path: /panelcontrol
+    defaults: { _controller: indexBundle:Cliente:panel}
+
+listados:
+    path: /listados
+    defaults: { _controller: indexBundle:Listados:listados}
+
+listados1:
+    path: /listados1
+    defaults: { _controller: indexBundle:Listados1:listados}
+
+listados2:
+    path: /listados2
+    defaults: { _controller: indexBundle:Listados2:listados}

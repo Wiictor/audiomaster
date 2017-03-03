@@ -1,0 +1,110 @@
+{% extends "::layout.html.twig" %}
+
+{% block carrusel %}
+    <link rel="stylesheet" href="{{ asset('js/owl-carousel/owl.carousel.css') }}">
+    <link rel="stylesheet" href="{{ asset('js/owl-carousel/owl.theme.css') }}">
+    <script src="{{ asset('js/owl-carousel/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
+    <style>
+        #filaCarrusel {
+            overflow-x: hidden;
+        }
+
+        #filaCarrusel, #filaProductos {
+            background-color: white;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    {% for error in app.session.flashbag.get("errorSesion") %}
+        <div class="errorSesion" style="background-color: black">
+            <div class="alert alert-danger alert-dismissable fade in" id="mensajeError" style="width: 60%; margin: auto;">
+                <p>{{ error }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    {% for cerrarSesion in app.session.flashbag.get("cerrarSesion") %}
+        <div class="errorSesion" style="background-color: black">
+            <div class="alert alert-success alert-dismissable fade in" id="mensajeError" style="width: 60%; margin: auto;">
+                <p>{{ cerrarSesion }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row" id="filaCarrusel">
+        <div class="col-sm-12">
+            <div class="owl-carousel" id="carruselImagenes">
+                {% for foto in fotos %}
+                    <div>
+                        <img src="{{ asset(foto) }}" alt="Imagen">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row" id="filaProductos">
+        <div class="col-sm-4">
+            <h2>Novedades</h2>
+            {% for novedad in novedades %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="{{ path('producto', { "id": novedad.id }) }}" title="{{ novedad.descripcion }}">
+                            <img src="{{ asset(novedad.url) }}" alt="{{ novedad.marca }} {{ novedad.modelo }}">
+                        </a>
+                        <a href="{{ path('producto', { "id": novedad.id }) }}"><h3>{{ novedad.marca }} {{ novedad.modelo }}</h3></a>
+                        <h3>{{ novedad.precio }}&euro; <span class="glyphicon glyphicon-shopping-cart"></span></h3>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+        <div class="col-sm-4">
+            <h2>Más vendidos</h2>
+            {% for masVendido in masVendidos %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="{{ path('producto', { "id": masVendido.id }) }}" title="{{ masVendido.descripcion }}
+Unidades vendidas: {{ masVendido.cant }}">
+                            <img src="{{ asset(masVendido.url) }}" class="imgproducto" alt="{{ masVendido.marca }} {{ masVendido.modelo }}">
+                        </a>
+                        <a href="{{ path('producto', { "id": masVendido.id }) }}" title="{{ masVendido.marca }} {{ masVendido.modelo }}"><h3>{{ masVendido.marca }} {{ masVendido.modelo }}</h3></a>
+                        <h3>{{ masVendido.precio }}&euro; <span class="glyphicon glyphicon-shopping-cart"></span></h3>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+        <div class="col-sm-4">
+            <h2>Últimas unidades</h2>
+            {% for ultUni in ultimasUnidades %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="{{ path('producto', { "id": ultUni.id }) }}" title="{{ ultUni.descripcion }}">
+                            <img src="{{ asset(ultUni.url) }}" class="imgproducto" alt="{{ ultUni.marca }} {{ ultUni.modelo }}">
+                        </a>
+                        <span class="badge" style="margin: auto; display: block; width: 32%">Quedan {{ ultUni.stockActual }} unidades</span>
+                        <a href="{{ path('producto', { "id": ultUni.id }) }}" title="{{ ultUni.marca }} {{ ultUni.modelo }}"><h3>{{ ultUni.marca }} {{ ultUni.modelo }}</h3></a>
+                        <h3>{{ ultUni.precio }}&euro; <span class="glyphicon glyphicon-shopping-cart"></span></h3>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $("#carruselImagenes").owlCarousel({
+                items: 1,
+                autoPlay: true
+            });
+
+            if($("#mensajeError").length) {
+                setTimeout(function () {
+                    $("#mensajeError").fadeOut("slow");
+                }, 5000);
+            }
+        });
+    </script>
+{% endblock %}

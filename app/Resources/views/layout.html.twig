@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Audio Master - Inicio{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="{{ asset('css/colors.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <style>
+            * {
+                font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+            }
+
+            .glyphicon {
+                font-family: 'Glyphicons Halflings', sans-serif !important;
+            }
+
+            body {
+                background-color: white;
+            }
+        </style>
+        <script>
+            window.onload = function () {
+
+                // Mostrar input de búsqueda
+
+                $("#btnBuscar").click(function () {
+                    if($("#divBusqueda").css("display") == "block") {
+                        $("#divBusqueda").slideUp();
+                    }
+                    else {
+                        $("#divBusqueda").slideDown();
+                    }
+                });
+
+                // Dropdown de carrito de compra
+
+                $('#btnCarrito').click(function () {
+                    $("#carrito").slideDown();
+                });
+
+                $(window).scroll(function () {
+                    $('#inicioSesion').fadeOut();
+                    $('#carrito').hide();
+                });
+
+                $("#btnAcceder").click(function () {
+                    $("#inicioSesion").fadeToggle();
+                });
+
+                var dataTooltip = $('[data-toggle="tooltip"]');
+
+                if(dataTooltip.length) {
+                    dataTooltip.tooltip();
+                }
+            };
+        </script>
+        {% block carrusel %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}" />
+    </head>
+    <body>
+        <div class="container" id="contenidoPrincipal">
+                <header>
+                    <div class="container-fluid">
+                        <div class="row" id="headersuperior">
+                            <ul class="list-inline col-sm-8">
+                                <li><a href="#" title="Contacto">Contacto</a></li>
+                                <li class="separador">|</li>
+                                <li><a href="#" title="Ayuda">Ayuda</a></li>
+                                <li class="separador">|</li>
+                                <li><a href="#" title="Sobre nosotros">Sobre nosotros</a></li>
+                                {% if app.session.get("usuario") is not null %}
+                                <li class="separador">|</li>
+                                <li><a href="{{ path('listados') }}">Listados</a></li>
+                                {% endif %}
+                            </ul>
+                            <ul id="areaClientes" class="list-inline col-sm-2">
+                                {% block cliente %}
+                                    {% if app.session.get("usuario") is null %}
+                                <li style="z-index: 100">
+                                    <button type="button" class="dropdown-toggle btn-link" data-toggle="dropdown" id="btnAcceder" title="Acceder">Acceder <span class="caret"></span></button>
+                                    <ul class="inicioSesion" id="inicioSesion" style="display: none; z-index: 1000; position: absolute; background-color: white; padding-left: 0; border-radius: 3px; border: 1px solid #cecece">
+                                        <li id="itemInicio" style="list-style-type: none">
+                                            <h3 id="cabeceraInicio" style="text-align: center">Iniciar sesión</h3>
+                                            <form id="formInicio" action="{{ path('login') }}" method="post">
+                                                <div class="row" id="rowForm1">
+                                                    <div class="form-group col-sm-12">
+                                                        <label for="usuario">Usuario:</label>
+                                                        <input type="text" name="usuario" id="usuario" class="form-control" required style="padding-left: 10px">
+                                                    </div>
+                                                </div>
+                                                <div class="row" id="rowForm2">
+                                                    <div class="form-group col-sm-12">
+                                                        <label for="contrasena">Contraseña:</label>
+                                                        <input type="password" name="contrasena" id="contrasena" class="form-control" required style="padding-left: 10px">
+                                                    </div>
+                                                </div>
+                                                <div class="row" id="rowForm3">
+                                                    <div class="col-sm-12 col-sm-offset-1">
+                                                        <a href="{{ path('registro') }}" title="¿No estás registrado?" style="text-decoration: underline !important;">¿No estás registrado?</a>
+                                                    </div>
+                                                </div>
+                                                <div class="row" id="rowForm4">
+                                                    <div class="col-sm-12 col-sm-offset-2">
+                                                        <input type="submit" value="Iniciar sesión" class="btn btn-success" id="btnEnviar">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                                {% else %}
+                                <li>
+                                    Bienvenido, {{ app.session.get("usuario") }}
+                                </li>
+                                <li>
+                                    <a href="{{ path('panelControl') }}" title="Acceder al panel de control"><span class="glyphicon glyphicon-cog" style="font-size: 14px"></span></a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('logout') }}" title="Cerrar sesión"><span class="glyphicon glyphicon-off" style="font-size: 14px"></span></a>
+                                </li>
+                                {% endif %}
+                                {% endblock %}
+                            </ul>
+
+                            <ul id="redesSociales" class="list-inline col-sm-2">
+                                <li data-toggle="tooltip" data-placement="bottom" title="Facebook">
+                                    <a href="https://www.facebook.com/" title="Facebook">
+                                        <img src="{{ asset('images/social/facebook.ico') }}" width="24" height="24" alt="Facebook">
+                                    </a>
+                                </li>
+                                <li data-toggle="tooltip" data-placement="bottom" title="Instagram">
+                                    <a href="https://www.instagram.com/" title="Instagram">
+                                        <img src="{{ asset('images/social/instagram.ico') }}" width="24" height="24" alt="Instagram">
+                                    </a>
+                                </li>
+                                <li data-toggle="tooltip" data-placement="bottom" title="Twitter">
+                                    <a href="https://twitter.com/" title="Twitter">
+                                        <img src="{{ asset('images/social/twitter.ico') }}" width="24" height="24" alt="Twitter">
+                                    </a>
+                                </li>
+                                <li data-toggle="tooltip" data-placement="bottom" title="Youtube">
+                                    <a href="https://www.youtube.com/" title="YouTube">
+                                        <img src="{{ asset('images/social/youtube.ico') }}" width="24" height="24" alt="YouTube">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </header>
+            <section id="categorias">
+                <div class="row">
+                    <a href="{{ path('index') }}" style="font-size: 24px; display: block; padding-top: 10px;" id="inicio" class="col-sm-offset-3 col-sm-5">AudioMaster - Tienda de instrumentos</a>
+                </div>
+                <ul class="list-inline">
+                    {{ render(controller('indexBundle:Categoria:categoria')) }}
+                    <li>
+                        <button class="btn btn-red" id="btnBuscar" title="Desplegar cajón de búsqueda"><span id="iconoBuscar" class="glyphicon glyphicon-search"></span> <span class="caret" style="color: white;"></span></button>
+                    </li>
+                    <li>
+                        <div class="dropdown">
+                            {% block carrito %}{% endblock %}
+                            {#<button id="btnCarrito" class="btn btn-red dropdown-toggle" type="button" data-toggle="dropdown" title="Carrito"><span class="glyphicon glyphicon-shopping-cart" id="iconoCarrito"></span></button>#}
+                            {#<ul class="dropdown-menu" id="carrito">#}
+                                {#{% set usuario =  app.session.get("usuario") %}#}
+                                {#{% if usuario is defined %}#}
+                                {#<li>#}
+                                    {#<h3>Tu carrito</h3>#}
+                                    {#{% block carrito %}{% endblock %}#}
+                                {#</li>#}
+                                {#{% else %}#}
+                                    {#<li>Debes iniciar sesión para ver tu carrito</li>#}
+                                {#{% endif %}#}
+                            {#</ul>#}
+                        </div>
+                    </li>
+                </ul>
+                <!-- campo de búsqueda -->
+                <div id="divBusqueda" class="form-group" style="display: none; padding-bottom: 0.8em; margin-bottom: 0">
+                    <label for="buscar" style="color: white;">Introduce una búsqueda:</label>
+                    <input type="text" name="buscar" id="buscar" class="form-control" style="text-align: left; width: 30%; margin: auto">
+                    <button class="btn btn-red" title="Realizar búsqueda..." style="margin-top: .6em"><span class="glyphicon glyphicon-ok" style="color: white;"></span></button>
+                </div>
+            </section>
+
+            {% block body %}{% endblock %}
+        </div>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

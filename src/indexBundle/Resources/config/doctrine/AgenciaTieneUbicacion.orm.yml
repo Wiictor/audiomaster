@@ -1,0 +1,20 @@
+indexBundle\Entity\AgenciaTieneUbicacion:
+    type: entity
+    table: null
+    repositoryClass: indexBundle\Repository\AgenciaTieneUbicacionRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        agenciaId:
+            type: integer
+            column: agencia_id
+        ubicacionId:
+            type: integer
+            column: ubicacion_id
+        precio:
+            type: integer
+    lifecycleCallbacks: {  }

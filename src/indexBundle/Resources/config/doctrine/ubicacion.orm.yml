@@ -1,0 +1,15 @@
+indexBundle\Entity\ubicacion:
+    type: entity
+    table: null
+    repositoryClass: indexBundle\Repository\ubicacionRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        ubicacion:
+            type: string
+            length: '30'
+    lifecycleCallbacks: {  }
